@@ -1,5 +1,5 @@
 package com.LP2.Aventura_Solo.model;
-
+/* 
 import java.util.Scanner;
 
 public class Main {
@@ -113,3 +113,5 @@ public class Main {
         }
     }
 }
+
+*/

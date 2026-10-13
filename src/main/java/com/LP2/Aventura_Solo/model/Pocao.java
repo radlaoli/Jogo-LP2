@@ -1,4 +1,5 @@
 package com.LP2.Aventura_Solo.model;
+/*
 
 public final class Pocao extends Item implements Usavel {
     private final int energiaRecuperada;
@@ -12,13 +13,15 @@ public final class Pocao extends Item implements Usavel {
     }
 
     @Override
+    
     public void usar(Aventureiro aventureiro) {
         aventureiro.recuperarEnergia(energiaRecuperada);
         System.out.println(aventureiro.getNome() + " usou " + getNome() + " e recuperou " + energiaRecuperada + " de energia.");
     }
-
+   
     @Override
     public String descricaoDetalhada() {
         return getNome() + " (Poção, +" + energiaRecuperada + " energia)";
     }
 }
+    */

@@ -17,6 +17,11 @@ public class AventureiroController {
         return aventureiroService.buscarAventureiro();
     }
 
+    @PostMapping("/{nome}")
+    public Aventureiro criar(@PathVariable String nome) {
+        return aventureiroService.criar(nome);
+    }
+
     @PostMapping("/dano/{dano}")
     public Aventureiro sofrerDano(@PathVariable int dano) {
         return aventureiroService.sofrerDano(dano);
@@ -25,5 +30,15 @@ public class AventureiroController {
     @PostMapping("/descansar/{quantidade}")
     public Aventureiro descansar(@PathVariable int quantidade) {
         return aventureiroService.descansar(quantidade);
+    }
+
+    @PostMapping("/usar-item/{nomeItem}")
+    public Aventureiro usarItem(@PathVariable String nomeItem) throws Exception {
+        return aventureiroService.usarItem(nomeItem);
+    }
+
+    @PostMapping("/concluir-missao")
+    public Aventureiro concluirMissaoAtiva() throws Exception {
+        return aventureiroService.concluirMissaoAtiva();
     }
 }
