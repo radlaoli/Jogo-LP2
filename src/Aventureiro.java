@@ -23,21 +23,10 @@ public final class Aventureiro {
         this(nome, ENERGIA_MAXIMA, 5);
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public int getEnergia() {
-        return energia;
-    }
-
-    public Inventario getInventario() {
-        return inventario;
-    }
-
-    public Missao getMissaoAtiva() {
-        return missaoAtiva;
-    }
+    public String getNome() { return nome; }
+    public int getEnergia() { return energia; }
+    public Inventario getInventario() { return inventario; }
+    public Missao getMissaoAtiva() { return missaoAtiva; }
 
     public void sofrerDano(int dano) {
         if (dano <= 0) {
@@ -46,11 +35,18 @@ public final class Aventureiro {
         this.energia = Math.max(0, this.energia - dano);
     }
 
-    public void descansar() {
-        this.energia = Math.min(ENERGIA_MAXIMA, this.energia + 10);
+    public void recuperarEnergia(int quantidade) {
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("Quantidade de energia deve ser maior que zero.");
+        }
+        this.energia = Math.min(ENERGIA_MAXIMA, this.energia + quantidade);
     }
 
-    public void aceitarMissao(Missao missao) {
+    public void descansar() {
+        recuperarEnergia(10);
+    }
+
+    public void aceitarMissao(Missao missao) throws MissaoIndisponivelException {
         if (missao == null) {
             throw new IllegalArgumentException("Missão não pode ser nula.");
         }
@@ -62,14 +58,13 @@ public final class Aventureiro {
         System.out.println(this.nome + " aceitou a missão: '" + missao.getTitulo() + "'");
     }
 
-    public void concluirMissaoAtiva() {
+    public void concluirMissaoAtiva() throws MissaoIndisponivelException {
         if (this.missaoAtiva == null) {
             throw new IllegalStateException("Nenhuma missão ativa para ser concluída.");
         }
 
         Recompensa recompensa = this.missaoAtiva.concluir();
-
-        this.energia = Math.min(ENERGIA_MAXIMA, this.energia + recompensa.getEnergia());
+        recuperarEnergia(recompensa.getEnergia());
 
         if (recompensa.getItem() != null) {
             boolean adicionado = this.inventario.adicionar(recompensa.getItem());
@@ -82,5 +77,15 @@ public final class Aventureiro {
         System.out.println("Recompensa recebida: " + recompensa.getDescricao() + " (+" + recompensa.getEnergia() + " energia)");
 
         this.missaoAtiva = null;
+    }
+
+    public void usarItem(String nomeItem) throws ItemNaoEncontradoException {
+        Item item = this.inventario.buscarPorNome(nomeItem);
+        if (item instanceof Usavel usavel) {
+            usavel.usar(this);
+            this.inventario.remover(item);
+        } else {
+            System.out.println(item.getNome() + " não pode ser usado diretamente.");
+        }
     }
 }

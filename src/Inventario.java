@@ -3,7 +3,7 @@ import java.util.List;
 
 public final class Inventario {
     private final int capacidade;
-    private final List<Item> itens; // Agregação: 1 -> *
+    private final List<Item> itens;
 
     public Inventario(int capacidade) {
         if (capacidade <= 0) {
@@ -27,15 +27,19 @@ public final class Inventario {
         return this.itens.remove(item);
     }
 
+    public Item buscarPorNome(String nome) throws ItemNaoEncontradoException {
+        for (Item item : itens) {
+            if (item.getNome().equalsIgnoreCase(nome)) {
+                return item;
+            }
+        }
+        throw new ItemNaoEncontradoException("Item \"" + nome + "\" não encontrado no inventário.");
+    }
+
     public List<Item> getItens() {
         return List.copyOf(this.itens);
     }
 
-    public int getCapacidade() {
-        return capacidade;
-    }
-
-    public int getQuantidadeAtual() {
-        return itens.size();
-    }
+    public int getCapacidade() { return capacidade; }
+    public int getQuantidadeAtual() { return itens.size(); }
 }

@@ -1,9 +1,7 @@
 public final class Missao {
 
     public enum EstadoMissao {
-        DISPONIVEL,
-        EM_ANDAMENTO,
-        CONCLUIDA
+        DISPONIVEL, EM_ANDAMENTO, CONCLUIDA
     }
 
     private final String titulo;
@@ -22,24 +20,19 @@ public final class Missao {
         this.estado = EstadoMissao.DISPONIVEL;
     }
 
-    public String getTitulo() {
-        return titulo;
-    }
+    public String getTitulo() { return titulo; }
+    public EstadoMissao getEstado() { return estado; }
 
-    public EstadoMissao getEstado() {
-        return estado;
-    }
-
-    public void iniciar() {
+    public void iniciar() throws MissaoIndisponivelException {
         if (this.estado != EstadoMissao.DISPONIVEL) {
-            throw new IllegalStateException("Apenas missões com estado DISPONIVEL podem ser iniciadas.");
+            throw new MissaoIndisponivelException("A missão \"" + titulo + "\" não está disponível.");
         }
         this.estado = EstadoMissao.EM_ANDAMENTO;
     }
 
-    public Recompensa concluir() {
+    public Recompensa concluir() throws MissaoIndisponivelException {
         if (this.estado != EstadoMissao.EM_ANDAMENTO) {
-            throw new IllegalStateException("Apenas missões com estado EM_ANDAMENTO podem ser concluídas.");
+            throw new MissaoIndisponivelException("A missão \"" + titulo + "\" não está em andamento.");
         }
         this.estado = EstadoMissao.CONCLUIDA;
         return this.recompensa;
