@@ -1,9 +1,9 @@
 package com.LP2.Aventura_Solo.model;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class Aventureiro {
 
@@ -28,5 +28,43 @@ public class Aventureiro {
 
     public Aventureiro(String nome, int energia) {
         this(nome, energia, 5);
+    }
+
+    public void recuperarEnergia(int quantidade) {
+        this.energia = Math.min(ENERGIA_MAXIMA, this.energia + quantidade);
+    }
+
+    public void sofrerDano(int dano) {
+        this.energia = Math.max(0, this.energia - dano);
+    }
+
+    public void aceitarMissao(Missao missao) throws MissaoIndisponivelException {
+        missao.iniciar();
+        this.missaoAtiva = missao;
+    }
+
+    public Recompensa concluirMissaoAtiva() throws MissaoIndisponivelException {
+        if (this.missaoAtiva == null) {
+            throw new IllegalStateException("O aventureiro não possui nenhuma missão ativa.");
+        }
+        Recompensa recompensa = this.missaoAtiva.concluir();
+        recuperarEnergia(recompensa.getEnergia());
+        if (recompensa.getItem() != null) {
+            this.inventario.adicionar(recompensa.getItem());
+        }
+        this.missaoAtiva = null;
+        return recompensa;
+    }
+
+    public void usarItem(String nomeItem) throws ItemNaoEncontradoException {
+        Item item = this.inventario.buscarPorNome(nomeItem);
+        if (!(item instanceof Usavel)) {
+            throw new IllegalStateException("O item \"" + nomeItem + "\" não pode ser usado.");
+        }
+        Usavel usavel = (Usavel) item;
+        usavel.usar(this);
+        if (item instanceof Pocao) {
+            this.inventario.remover(item);
+        }
     }
 }
