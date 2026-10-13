@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public abstract class Item {
     private final String nome;
     private final Raridade raridade;
@@ -24,4 +26,19 @@ public abstract class Item {
     public int getValor() { return valor; }
 
     public abstract String descricaoDetalhada();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item)) return false;
+        Item outro = (Item) o;
+        return this.valor == outro.valor
+            && this.nome.equals(outro.nome)
+            && this.raridade == outro.raridade;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome, raridade, valor);
+    }
 }
