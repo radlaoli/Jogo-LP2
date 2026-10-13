@@ -1,3 +1,4 @@
+package com.LP2.Aventura_Solo.model;
 public final class Arma extends Item {
     private final int dano;
 

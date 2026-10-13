@@ -1,3 +1,5 @@
+package com.LP2.Aventura_Solo.model;
+
 import java.util.Objects;
 
 public abstract class Item {

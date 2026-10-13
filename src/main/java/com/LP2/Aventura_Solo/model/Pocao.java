@@ -1,3 +1,5 @@
+package com.LP2.Aventura_Solo.model;
+
 public final class Pocao extends Item implements Usavel {
     private final int energiaRecuperada;
 

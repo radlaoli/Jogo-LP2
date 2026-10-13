@@ -1,3 +1,5 @@
+package com.LP2.Aventura_Solo.model;
+
 public final class Recompensa {
     private final String descricao;
     private final int energia;
