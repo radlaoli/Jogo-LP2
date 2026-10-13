@@ -1,3 +1,4 @@
+package com.LP2.Aventura_Solo.model;
 import java.util.ArrayList;
 import java.util.List;
 
