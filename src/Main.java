@@ -1,68 +1,113 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("==================================================");
-        System.out.println("   CENÁRIO 1   ");
-        System.out.println("==================================================");
+        try (Scanner scanner = new Scanner(System.in)) {
 
-        Item espada = new Item("Espada de Ferro", Item.TipoItem.ARMA, Item.Raridade.COMUM, 40);
-        Item pocao = new Item("Elixir de Vida", Item.TipoItem.CONSUMIVEL, Item.Raridade.RARO, 25);
+            System.out.print("Digite o nome do seu aventureiro: ");
+            String nomeAventureiro = scanner.nextLine();
 
-        Recompensa recompensaCaverna = new Recompensa("Tesouro da Gruta", 30, pocao);
-        Missao missao1 = new Missao("Limpar a caverna infestada", recompensaCaverna);
+            System.out.println("==================================================");
+            System.out.println("   CENÁRIO 1   ");
+            System.out.println("==================================================");
 
-        Aventureiro aventureiro = new Aventureiro("Hercules", 60, 3);
-        System.out.println("Aventureiro: " + aventureiro.getNome() + " | Energia inicial: " + aventureiro.getEnergia());
+            Arma espada = new Arma("Espada de Ferro", Item.Raridade.COMUM, 40, 15);
+            Pocao pocao = new Pocao("Elixir de Vida", Item.Raridade.RARO, 25, 30);
 
-        aventureiro.getInventario().adicionar(espada);
+            Recompensa recompensaCaverna = new Recompensa("Tesouro da Gruta", 30, pocao);
+            Missao missao1 = new Missao("Limpar a caverna infestada", recompensaCaverna);
 
-        aventureiro.sofrerDano(30);
-        System.out.println("Após batalha -> Energia: " + aventureiro.getEnergia());
+            MissaoRepositorio repositorio = new MissaoRepositorio();
+            repositorio.salvar(missao1);
 
-        aventureiro.aceitarMissao(missao1);
-        aventureiro.concluirMissaoAtiva();
+            Aventureiro aventureiro = new Aventureiro(nomeAventureiro, 60, 3);
+            System.out.println("Aventureiro: " + aventureiro.getNome() + " | Energia inicial: " + aventureiro.getEnergia());
 
-        System.out.println("Após concluir missão -> Energia: " + aventureiro.getEnergia());
+            aventureiro.getInventario().adicionar(espada);
+            System.out.println(espada.descricaoDetalhada());
 
-        System.out.println("==================================================");
-        System.out.println("   CENÁRIO 2   ");
-        System.out.println("==================================================");
+            aventureiro.sofrerDano(30);
+            System.out.println("Após batalha -> Energia: " + aventureiro.getEnergia());
 
-        Aventureiro aventureiro2 = new Aventureiro("Turing");
-        System.out.println("Energia padrão: " + aventureiro2.getEnergia());
+            try {
+                Missao missaoEncontrada = repositorio.buscar("Limpar a caverna infestada");
+                aventureiro.aceitarMissao(missaoEncontrada);
+                aventureiro.concluirMissaoAtiva();
+            } catch (MissaoIndisponivelException e) {
+                System.out.println("ERRO: " + e.getMessage());
+            }
 
-        aventureiro2.descansar();
-        System.out.println("Energia após descansar (limitada a " + Aventureiro.ENERGIA_MAXIMA + "): " + aventureiro2.getEnergia() + "\n");
+            System.out.println("Após concluir missão -> Energia: " + aventureiro.getEnergia());
 
-        System.out.println("==================================================");
-        System.out.println("   CENÁRIO 3   ");
-        System.out.println("==================================================");
+            try {
+                aventureiro.usarItem("Elixir de Vida");
+            } catch (ItemNaoEncontradoException e) {
+                System.out.println("ERRO: " + e.getMessage());
+            }
 
-        try {
-            System.out.println("Tentando concluir sem ter missão ativa:");
-            aventureiro.concluirMissaoAtiva();
-        } catch (IllegalStateException e) {
-            System.out.println("ERRO: " + e.getMessage());
-        }
+            System.out.println("==================================================");
+            System.out.println("   CENÁRIO 2   ");
+            System.out.println("==================================================");
 
-        try {
-            System.out.println("\nTentando reiniciar missão que já foi concluída:");
-            missao1.iniciar();
-        } catch (IllegalStateException e) {
-            System.out.println("ERRO: " + e.getMessage());
-        }
+            Aventureiro aventureiro2 = new Aventureiro("Turing");
+            System.out.println("Energia padrão: " + aventureiro2.getEnergia());
 
-        try {
-            System.out.println("\nTentando criar Item com valor negativo:");
-            new Item("Item Inválido", Item.TipoItem.EQUIPAMENTO, Item.Raridade.COMUM, -50);
-        } catch (IllegalArgumentException e) {
-            System.out.println("ERRO: " + e.getMessage());
-        }
+            aventureiro2.descansar();
+            System.out.println("Energia após descansar (limitada a " + Aventureiro.ENERGIA_MAXIMA + "): " + aventureiro2.getEnergia() + "\n");
 
-        try {
-            System.out.println("\nTentando adicionar item diretamente pela lista retornada:");
-            aventureiro.getInventario().getItens().add(new Item("Item Hackeado", Item.TipoItem.ARMA, Item.Raridade.LENDARIO, 999));
-        } catch (UnsupportedOperationException e) {
-            System.out.println("ERRO: Modificação externa impedida por List.copyOf.");
+            System.out.println("==================================================");
+            System.out.println("   CENÁRIO 3   ");
+            System.out.println("==================================================");
+
+            try {
+                System.out.println("Tentando concluir sem ter missão ativa:");
+                aventureiro.concluirMissaoAtiva();
+            } catch (IllegalStateException | MissaoIndisponivelException e) {
+                System.out.println("ERRO: " + e.getMessage());
+            }
+
+            try {
+                System.out.println("\nTentando reiniciar missão que já foi concluída:");
+                missao1.iniciar();
+            } catch (MissaoIndisponivelException e) {
+                System.out.println("ERRO: " + e.getMessage());
+            }
+
+            try {
+                System.out.println("\nTentando buscar missão inexistente no repositório:");
+                repositorio.buscar("Missão Fantasma");
+            } catch (MissaoIndisponivelException e) {
+                System.out.println("ERRO: " + e.getMessage());
+            }
+
+            try {
+                System.out.println("\nTentando salvar missão com título duplicado:");
+                repositorio.salvar(new Missao("Limpar a caverna infestada", new Recompensa("Outra recompensa", 10)));
+            } catch (IllegalArgumentException e) {
+                System.out.println("ERRO: " + e.getMessage());
+            }
+
+            try {
+                System.out.println("\nTentando criar Equipamento com defesa inválida:");
+                new Equipamento("Item Inválido", Item.Raridade.COMUM, 10, -5);
+            } catch (IllegalArgumentException e) {
+                System.out.println("ERRO: " + e.getMessage());
+            }
+
+            try {
+                System.out.println("\nTentando usar item que não existe no inventário:");
+                aventureiro.usarItem("Poção Inexistente");
+            } catch (ItemNaoEncontradoException e) {
+                System.out.println("ERRO: " + e.getMessage());
+            }
+
+            try {
+                System.out.println("\nTentando adicionar item diretamente pela lista retornada:");
+                aventureiro.getInventario().getItens().add(new Arma("Item Hackeado", Item.Raridade.LENDARIO, 999, 50));
+            } catch (UnsupportedOperationException e) {
+                System.out.println("ERRO: Modificação externa impedida por List.copyOf.");
+            }
+
         }
     }
 }
