@@ -1,11 +1,14 @@
 package com.LP2.Aventura_Solo.service;
 
+ import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.LP2.Aventura_Solo.model.Aventureiro;
 import com.LP2.Aventura_Solo.model.ItemNaoEncontradoException;
 import com.LP2.Aventura_Solo.model.Missao;
 import com.LP2.Aventura_Solo.model.MissaoIndisponivelException;
+import com.LP2.Aventura_Solo.model.Item;
 
 @Service
 public class AventureiroService {
@@ -44,5 +47,9 @@ public class AventureiroService {
     public Aventureiro usarItem(String nomeItem) throws ItemNaoEncontradoException {
         aventureiro.usarItem(nomeItem);
         return aventureiro;
+    }
+
+    public List<Item> listarItensInventario() {
+        return aventureiro.getInventario().getItens();
     }
 }

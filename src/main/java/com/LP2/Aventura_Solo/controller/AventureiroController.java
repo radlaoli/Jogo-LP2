@@ -1,9 +1,12 @@
 package com.LP2.Aventura_Solo.controller;
 
+import java.util.List;
+
 import com.LP2.Aventura_Solo.model.Aventureiro;
 import com.LP2.Aventura_Solo.service.AventureiroService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import com.LP2.Aventura_Solo.model.Item;
 
 @RestController
 @RequestMapping("/aventureiro")
@@ -41,4 +44,9 @@ public class AventureiroController {
     public Aventureiro concluirMissaoAtiva() throws Exception {
         return aventureiroService.concluirMissaoAtiva();
     }
+
+    @GetMapping("/inventario")
+        public List<Item> listarItensInventario() {
+    return aventureiroService.listarItensInventario();
+}
 }
