@@ -1,4 +1,8 @@
 package com.LP2.Aventura_Solo.model;
+
+import lombok.Getter;
+
+@Getter 
 public final class Equipamento extends Item {
     private final int defesa;
 
@@ -9,8 +13,6 @@ public final class Equipamento extends Item {
         }
         this.defesa = defesa;
     }
-
-    public int getDefesa() { return defesa; }
 
     @Override
     public String descricaoDetalhada() {

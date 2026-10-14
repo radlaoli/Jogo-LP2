@@ -1,5 +1,8 @@
 package com.LP2.Aventura_Solo.model;
 
+import lombok.Getter;
+
+@Getter 
 public final class Missao {
 
     public enum EstadoMissao {
@@ -21,9 +24,6 @@ public final class Missao {
         this.recompensa = recompensa;
         this.estado = EstadoMissao.DISPONIVEL;
     }
-
-    public String getTitulo() { return titulo; }
-    public EstadoMissao getEstado() { return estado; }
 
     public void iniciar() throws MissaoIndisponivelException {
         if (this.estado != EstadoMissao.DISPONIVEL) {

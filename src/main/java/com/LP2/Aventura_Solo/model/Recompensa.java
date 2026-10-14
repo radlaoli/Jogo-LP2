@@ -1,5 +1,8 @@
 package com.LP2.Aventura_Solo.model;
 
+import lombok.Getter;
+
+@Getter 
 public final class Recompensa {
     private final String descricao;
     private final int energia;
@@ -19,17 +22,5 @@ public final class Recompensa {
 
     public Recompensa(String descricao, int energia) {
         this(descricao, energia, null);
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public int getEnergia() {
-        return energia;
-    }
-
-    public Item getItem() {
-        return item;
     }
 }

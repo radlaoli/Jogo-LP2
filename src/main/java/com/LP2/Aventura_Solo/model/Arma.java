@@ -1,4 +1,7 @@
 package com.LP2.Aventura_Solo.model;
+
+import lombok.Getter;
+@Getter 
 public final class Arma extends Item {
     private final int dano;
 
@@ -9,8 +12,6 @@ public final class Arma extends Item {
         }
         this.dano = dano;
     }
-
-    public int getDano() { return dano; }
 
     @Override
     public String descricaoDetalhada() {

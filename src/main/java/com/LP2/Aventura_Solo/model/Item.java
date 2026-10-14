@@ -2,6 +2,9 @@ package com.LP2.Aventura_Solo.model;
 
 import java.util.Objects;
 
+import lombok.Getter;
+
+@Getter 
 public abstract class Item {
     private final String nome;
     private final Raridade raridade;
@@ -22,10 +25,6 @@ public abstract class Item {
         this.raridade = raridade;
         this.valor = valor;
     }
-
-    public String getNome() { return nome; }
-    public Raridade getRaridade() { return raridade; }
-    public int getValor() { return valor; }
 
     public abstract String descricaoDetalhada();
 
